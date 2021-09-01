@@ -11,7 +11,7 @@ class PyImage:
         with open(path, 'r', encoding='utf8') as file:
             self.content = file.readlines()
 
-        self.font = ImageFont.truetype('arial.ttf', 12)
+        self.font = ImageFont.truetype('arial.ttf', 14)
 
         self.color_pallete = {
             'lines': '#959595',
@@ -23,16 +23,16 @@ class PyImage:
         self._check = Image.new('RGBA', (PIXEL, PIXEL), background)
         self._check_draw = ImageDraw.Draw(self._check)
 
-        self.x, y_size = self._get_max_lines()
+        self.x, self.y = self._get_max_lines()
         x_size = self._get_max_chars()
 
-        size = (x_size + self.x, (y_size * self._lines) + MARGIN)
+        size = (x_size, (self.y * self._lines) + MARGIN)
 
         self.image = Image.new('RGBA', size, background)
         self.draw = ImageDraw.Draw(self.image)
 
     def _get_max_chars(self) -> int:
-        extra = []
+        extra = [0]
 
         for content in self.content:
             if len(content) > LIMIT:
@@ -70,14 +70,24 @@ class PyImage:
                 font=self.font,
             )
 
-    def set_font(self, style: str, size: int) -> None:
-        self.font = ImageFont.truetype(style, size)
+    def _draw_code(self) -> None:
+        for n, content in enumerate(self.content):
+            self.draw.text(
+                ((self.x + MARGIN), (self.y * n) + MARGIN),
+                content,
+                fill=self.color_pallete['normal'],
+                font=self.font,
+            )
+
+    def set_font(self, font: str) -> None:
+        self.font = ImageFont.truetype(font, 14)
 
     def set_color_pallete(self, pallete: dict) -> None:
         self.color_pallete.update(pallete)
 
     def generate_image(self) -> None:
         self._draw_numbers()
+        self._draw_code()
 
     def save_image(self, path: str) -> None:
         self.image.save(path)
