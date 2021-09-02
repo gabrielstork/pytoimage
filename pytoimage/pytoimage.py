@@ -7,11 +7,14 @@ MARGIN = 5
 
 
 class PyImage:
-    def __init__(self, path: str, background: str = '#262626') -> None:
+    def __init__(self, path: str, background: str = '#0D1117') -> None:
         with open(path, 'r', encoding='utf8') as file:
             self.content = file.readlines()
 
-        self.font = ImageFont.truetype('arial.ttf', 14)
+        self.font = ImageFont.truetype(
+            'fonts/Inconsolata_SemiCondensed-Regular.ttf',
+            16,
+        )
 
         self.color_pallete = {
             'lines': '#959595',
@@ -79,8 +82,8 @@ class PyImage:
                 font=self.font,
             )
 
-    def set_font(self, font: str) -> None:
-        self.font = ImageFont.truetype(font, 14)
+    def set_font(self, path: str) -> None:
+        self.font = ImageFont.truetype(path, 16)
 
     def set_color_pallete(self, pallete: dict) -> None:
         self.color_pallete.update(pallete)
