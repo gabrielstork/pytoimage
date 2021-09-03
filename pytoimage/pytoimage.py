@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 LIMIT = 79
-PIXEL = LIMIT * 8
+PIXEL = 600
 MARGIN = 5
 
 
@@ -12,26 +12,24 @@ class PyImage:
             self.content = file.readlines()
 
         self.font = ImageFont.truetype(
-            'fonts/Inconsolata_SemiCondensed-Regular.ttf',
+            'fonts/Inconsolata_SemiCondensed-ExtraBold.ttf',
             16,
         )
 
         self.color_pallete = {
-            'lines': '#959595',
+            'line': '#959595',
             'normal': '#FFFFFF',
-            'keywords': '#F02727',
         }
 
         self._lines = len(self.content)
-        self._check = Image.new('RGBA', (PIXEL, PIXEL), background)
+        self._check = Image.new('RGB', (PIXEL, PIXEL), background)
         self._check_draw = ImageDraw.Draw(self._check)
 
-        self.x, self.y = self._get_max_lines()
-        x_size = self._get_max_chars()
+        self.x_line, self.y_line = self._get_max_lines()
+        self.x = self._get_max_chars()
+        self.y = (self.y_line * self._lines) + MARGIN
 
-        size = (x_size, (self.y * self._lines) + MARGIN)
-
-        self.image = Image.new('RGBA', size, background)
+        self.image = Image.new('RGB', (self.x, self.y), background)
         self.draw = ImageDraw.Draw(self.image)
 
     def _get_max_chars(self) -> int:
@@ -67,16 +65,16 @@ class PyImage:
             y += MARGIN
 
             self.draw.text(
-                ((self.x) - x, y * (line - 1) + MARGIN),
+                ((self.x_line) - x, y * (line - 1) + MARGIN),
                 str(line),
-                fill=self.color_pallete['lines'],
+                fill=self.color_pallete['line'],
                 font=self.font,
             )
 
     def _draw_code(self) -> None:
         for n, content in enumerate(self.content):
             self.draw.text(
-                ((self.x + MARGIN), (self.y * n) + MARGIN),
+                ((self.x_line + MARGIN), (self.y_line * n) + MARGIN),
                 content,
                 fill=self.color_pallete['normal'],
                 font=self.font,
@@ -88,9 +86,22 @@ class PyImage:
     def set_color_pallete(self, pallete: dict) -> None:
         self.color_pallete.update(pallete)
 
-    def generate_image(self) -> None:
+    def generate_image(self, start: int = None, end: int = None) -> None:
         self._draw_numbers()
         self._draw_code()
+
+        top = 0
+        bottom = self.y
+
+        if start is not None:
+            top = ((start - 1) * self.y_line) + MARGIN
+        if end is not None:
+            bottom = self.y - ((self._lines - end) * self.y_line)
+
+        self.image = self.image.crop((0, top, self.x, bottom))
+
+    def show_image(self) -> None:
+        self.image.show()
 
     def save_image(self, path: str) -> None:
         self.image.save(path)
