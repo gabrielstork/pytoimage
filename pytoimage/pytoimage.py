@@ -3,21 +3,26 @@ from PIL import Image, ImageDraw, ImageFont
 LIMIT = 79
 WIDTH = 600
 MARGIN = 5
+BACKGROUND = (15, 15, 15)
+FONT = 'fonts/Inconsolata.ttf'
 
 
 class PyImage:
-    def __init__(self, path: str, background: str = '#0D1117') -> None:
+    def __init__(
+        self,
+        path: str,
+        background: tuple = BACKGROUND,
+        font: str = FONT,
+    ) -> None:
+
         with open(path, 'r', encoding='utf8') as file:
             self.content = file.readlines()
 
-        self.font = ImageFont.truetype(
-            'fonts/Inconsolata_SemiCondensed-ExtraBold.ttf',
-            16,
-        )
+        self.font = ImageFont.truetype(font, 16)
 
-        self.color_pallete = {
-            'line': '#959595',
-            'normal': '#FFFFFF',
+        self.color_palette = {
+            'line': (149, 149, 149),
+            'normal': (255, 255, 255),
         }
 
         self._lines = len(self.content)
@@ -66,7 +71,7 @@ class PyImage:
             self.draw.text(
                 ((self.x_line) - x, y * (line - 1) + MARGIN),
                 str(line),
-                fill=self.color_pallete['line'],
+                fill=self.color_palette['line'],
                 font=self.font,
             )
 
@@ -75,15 +80,12 @@ class PyImage:
             self.draw.text(
                 ((self.x_line + MARGIN), (self.y_line * n) + MARGIN),
                 content,
-                fill=self.color_pallete['normal'],
+                fill=self.color_palette['normal'],
                 font=self.font,
             )
 
-    def set_font(self, path: str) -> None:
-        self.font = ImageFont.truetype(path, 16)
-
-    def set_color_pallete(self, pallete: dict) -> None:
-        self.color_pallete.update(pallete)
+    def set_color_palette(self, palette: dict) -> None:
+        self.color_palette.update(palette)
 
     def generate_image(self, start: int = 0, end: int = 0) -> None:
         self._draw_numbers()
