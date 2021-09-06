@@ -1,17 +1,19 @@
 from PIL import Image, ImageDraw, ImageFont
+import pathlib
 
 LIMIT = 79
 WIDTH = 600
 MARGIN = 5
-BACKGROUND = (15, 15, 15)
-FONT = 'fonts/Inconsolata.ttf'
+
+here = pathlib.Path(__file__)
+FONT = str(here.parent / 'fonts' / 'Inconsolata.ttf')
 
 
 class PyImage:
     def __init__(
         self,
         path: str,
-        background: tuple = BACKGROUND,
+        background: tuple = (15, 15, 15),
         font: str = FONT,
     ) -> None:
 
