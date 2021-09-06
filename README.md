@@ -45,11 +45,13 @@ palette = {
 code.set_color_palette(palette=palette)
 ```
 
-To generate the image, you can simply call the method with no arguments, the **start** and **end** are optional, and these are the interval of lines that you want to be in your image.
+To generate the image, you can simply call the method with no arguments, the **start** and **end** are optionals, these are the code intervals.
 
 ```python
 code.generate_image(start=39, end=51)
 ```
+
+Then you can see and save the generated image.
 
 ```python
 code.show_image()
