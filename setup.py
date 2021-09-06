@@ -20,8 +20,8 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     keywords='image code custom theme color palette',
-    package_dir={'': '.'},
-    packages=setuptools.find_packages(where='.'),
+    packages=setuptools.find_packages(),
+    include_package_data = True,
     install_requires=['pillow'],
     python_requires='>=3',
 )
