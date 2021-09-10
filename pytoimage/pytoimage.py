@@ -4,9 +4,8 @@ import pathlib
 LIMIT = 79
 WIDTH = 600
 MARGIN = 5
-
-here = pathlib.Path(__file__)
-FONT = str(here.parent / 'fonts' / 'Inconsolata.ttf')
+FILE = pathlib.Path(__file__)
+FONT = str(FILE.parent / 'fonts' / 'Inconsolata.ttf')
 
 
 class PyImage:
